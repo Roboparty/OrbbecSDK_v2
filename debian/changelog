@@ -1,0 +1,7 @@
+orbbecsdk (2.10.6-1) unstable; urgency=medium
+
+  * Initial RoboParty packaging of Orbbec SDK v2.10.6.
+  * Ship runtime, headers, CMake config and firmware update tool in one package.
+  * Install udev rules with MODE=0660 and GROUP=video.
+
+ -- wentywenty <2321901849@qq.com>  Fri, 06 Nov 2026 23:10:00 +0800

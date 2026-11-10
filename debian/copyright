@@ -1,0 +1,57 @@
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: OrbbecSDK_v2
+Source: https://github.com/orbbec/OrbbecSDK_v2
+Upstream-Contact: Orbbec Inc.
+
+Files: *
+Copyright: 2024-2026 Orbbec Inc.
+License: MIT
+
+Files: extensions/*
+Copyright: 2024-2026 Orbbec Inc.
+License: Orbbec-Extension
+ This license grants, free of charge, to any person obtaining a copy of this
+ repository or substantial portions of this repository, the right to use the
+ files in this repository for utilizing products from Orbbec Inc. You may apply
+ this repository for personal, academic, and commercial use. The above copyright
+ notice and this permission notice shall be included in all copies or substantial
+ portions of the repository.
+ .
+ Prohibited Actions: You are prohibited from modifying, decompiling, or reverse
+ engineering any part of this library. You cannot use this library for products
+ other than those of Orbbec.
+ .
+ Reservation of Rights: The author reserves the right to modify this license at
+ any time without prior notice. The author reserves all rights to this library.
+ .
+ Disclaimer: This library is provided "as is," and the author assumes no
+ responsibility for any direct, indirect, incidental, special, or consequential
+ damages resulting from the use of this library.
+ .
+ License Updates: If the author releases a new version of the license, you agree
+ to comply with the new version after receiving notice.
+
+Files: 3rdparty/*
+Copyright: respective upstream authors
+License: other
+ Third-party libraries retain their upstream licenses. See the license files
+ under 3rdparty/ in the source package.
+
+License: MIT
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+ .
+ The above copyright notice and this permission notice shall be included in all
+ copies or substantial portions of the Software.
+ .
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ SOFTWARE.

@@ -1,0 +1,75 @@
+#!/usr/bin/make -f
+
+export DH_VERBOSE = 1
+export DEB_BUILD_MAINT_OPTIONS = optimize=-lto
+export CCACHE_DISABLE = 1
+
+MAIN_BUILD = $(CURDIR)/build-main
+TOOL_BUILD = $(CURDIR)/build-tool
+JOBS = $(shell nproc)
+
+%:
+	dh $@
+
+override_dh_auto_configure:
+	rm -rf $(MAIN_BUILD) $(TOOL_BUILD)
+	cmake -S . -B $(MAIN_BUILD) \
+		-DCMAKE_BUILD_TYPE=Release \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DOB_BUILD_EXAMPLES=OFF \
+		-DOB_BUILD_DOCS=OFF \
+		-DOB_BUILD_TESTS=OFF \
+		-DOB_BUILD_TOOLS=OFF \
+		-DOB_INSTALL_EXAMPLES_SOURCE=OFF \
+		-DOB_INSTALL_LICENSES=OFF \
+		-DCMAKE_BUILD_WITH_INSTALL_RPATH=ON \
+		-DCMAKE_INSTALL_RPATH='$$ORIGIN/../lib'
+	cmake -S . -B $(TOOL_BUILD) \
+		-DCMAKE_BUILD_TYPE=Release \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DOB_BUILD_EXAMPLES=ON \
+		-DOB_BUILD_DOCS=OFF \
+		-DOB_BUILD_TESTS=OFF \
+		-DOB_BUILD_TOOLS=OFF \
+		-DOB_INSTALL_EXAMPLES_SOURCE=OFF \
+		-DOB_INSTALL_LICENSES=OFF \
+		-DCMAKE_BUILD_WITH_INSTALL_RPATH=ON \
+		-DCMAKE_INSTALL_RPATH='$$ORIGIN/../lib'
+
+override_dh_auto_build:
+	cmake --build $(MAIN_BUILD) -j$(JOBS)
+	cmake --build $(TOOL_BUILD) --target ob_device_firmware_update -j$(JOBS)
+
+override_dh_auto_install:
+	rm -rf $(CURDIR)/debian/tmp
+	mkdir -p $(CURDIR)/debian/tmp
+	DESTDIR=$(CURDIR)/debian/tmp cmake --install $(MAIN_BUILD)
+	rm -rf $(CURDIR)/debian/tmp/usr/shared $(CURDIR)/debian/tmp/usr/setup.sh
+	install -D -m 0644 debian/99-obsensor-libusb.rules \
+		$(CURDIR)/debian/tmp/lib/udev/rules.d/99-obsensor-libusb.rules
+	mkdir -p $(CURDIR)/debian/tmp/usr/lib/cmake/OrbbecSDK
+	mv $(CURDIR)/debian/tmp/usr/lib/OrbbecSDKConfig.cmake \
+		$(CURDIR)/debian/tmp/usr/lib/OrbbecSDKConfig-release.cmake \
+		$(CURDIR)/debian/tmp/usr/lib/OrbbecSDKVersion.cmake \
+		$(CURDIR)/debian/tmp/usr/lib/cmake/OrbbecSDK/
+	# The generated config assumes it is installed directly in <prefix>/lib;
+	# add the extra cmake/OrbbecSDK directory component.
+	sed -i '/^get_filename_component(_IMPORT_PREFIX "$${_IMPORT_PREFIX}" PATH)$$/a get_filename_component(_IMPORT_PREFIX "$${_IMPORT_PREFIX}" PATH)\nget_filename_component(_IMPORT_PREFIX "$${_IMPORT_PREFIX}" PATH)' \
+		$(CURDIR)/debian/tmp/usr/lib/cmake/OrbbecSDK/OrbbecSDKConfig.cmake
+	tool=$$(find $(TOOL_BUILD) -type f -name ob_device_firmware_update | head -n 1); \
+		test -n "$$tool"; \
+		install -D -m 0755 "$$tool" $(CURDIR)/debian/tmp/usr/bin/ob_device_firmware_update; \
+		patchelf --set-rpath '$$ORIGIN/../lib' \
+			$(CURDIR)/debian/tmp/usr/bin/ob_device_firmware_update
+
+override_dh_auto_clean:
+	rm -rf $(MAIN_BUILD) $(TOOL_BUILD)
+
+# The linux_arm64 enhanced depth filter is a prebuilt JetPack plugin that links
+# against CUDA/TensorRT (libcudart.so.12, libnvinfer.so.10), which are not
+# Debian dependencies. Skip them so dpkg-shlibdeps does not abort on arm64.
+override_dh_shlibdeps:
+	dh_shlibdeps -Xlibengine_infer_encry.so -Xlibenhanced_depth_filter.so
+
+override_dh_clean:
+	dh_clean -X '#*#'

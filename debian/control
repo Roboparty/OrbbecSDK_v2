@@ -1,0 +1,21 @@
+Source: orbbecsdk
+Section: libs
+Priority: optional
+Maintainer: wentywenty <2321901849@qq.com>
+Build-Depends: debhelper-compat (= 13), cmake, g++, pkg-config, patchelf
+Standards-Version: 4.6.2
+Rules-Requires-Root: no
+Homepage: https://github.com/Roboparty/OrbbecSDK_v2
+Vcs-Git: https://github.com/Roboparty/OrbbecSDK_v2.git
+Vcs-Browser: https://github.com/Roboparty/OrbbecSDK_v2
+
+Package: orbbecsdk
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, udev
+Description: Orbbec SDK v2
+ Runtime, C/C++ development files, CMake package files, udev rules and
+ command-line tools for Orbbec 3D cameras.
+ .
+ The firmware update utility is included, but firmware images are not.
+ Run it manually after verifying the target model, serial number and
+ image checksum.

@@ -148,7 +148,7 @@ include/libobsensor/h/Export.h
 *.obj
 *.deb
 *.ddeb
-debian/
+# RoboParty Debian packaging is tracked in this fork
 # Precompiled Headers
 *.gch
 *.pch
@@ -903,3 +903,22 @@ FodyWeavers.xsd
 # Additional files built by Visual Studio
 
 # End of https://www.toptal.com/developers/gitignore/api/visualstudio,visualstudiocode,c++,python,jetbrains+all,ros,ros2
+
+# RoboParty Debian build trees
+build-main/
+build-tool/
+
+# Debian build outputs
+.debhelper/
+debian/.debhelper/
+debian/tmp/
+debian/files
+debian/*.substvars
+debian/debhelper-build-stamp
+debian/liborbbecsdk2/
+debian/liborbbecsdk-dev/
+debian/orbbec-sdk-tools/
+debian/liborbbecsdk2-dbgsym/
+debian/orbbec-sdk-tools-dbgsym/
+debian/orbbecsdk/
+debian/orbbecsdk-dbgsym/

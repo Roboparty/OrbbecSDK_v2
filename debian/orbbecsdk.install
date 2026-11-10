@@ -1,0 +1,4 @@
+usr/lib/
+usr/include/
+usr/bin/ob_device_firmware_update
+lib/udev/rules.d/99-obsensor-libusb.rules
