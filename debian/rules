@@ -65,11 +65,12 @@ override_dh_auto_install:
 override_dh_auto_clean:
 	rm -rf $(MAIN_BUILD) $(TOOL_BUILD)
 
-# The linux_arm64 enhanced depth filter is a prebuilt JetPack plugin that links
-# against CUDA/TensorRT (libcudart.so.12, libnvinfer.so.10), which are not
-# Debian dependencies. Skip them so dpkg-shlibdeps does not abort on arm64.
+# The bundled extension plugins (depthengine/filters/frameprocessor/firmwareupdater)
+# are prebuilt, dlopen()-ed libraries. They may link against libEGL or CUDA/TensorRT,
+# which are platform-provided and not Debian build dependencies. Exclude the whole
+# extensions tree so dpkg-shlibdeps does not abort on missing libraries.
 override_dh_shlibdeps:
-	dh_shlibdeps -Xlibengine_infer_encry.so -Xlibenhanced_depth_filter.so
+	dh_shlibdeps -Xusr/lib/extensions
 
 override_dh_clean:
 	dh_clean -X '#*#'
